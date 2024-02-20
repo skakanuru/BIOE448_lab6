@@ -1,13 +1,13 @@
 const int sensor_pin = A1;
 double pulse_signal = 0;
 float BPM = 0;
-int upper_threshold = 1000;
-int lower_threshold = 300;
+int upper_threshold = 900;
+int lower_threshold = 800;
 bool any_peak_detected = false;
 bool first_peak_detected = false;
 unsigned long first_pulse_time = 0;
 unsigned long second_pulse_time = 0;
-unsigned long pulse_period = 0;
+float pulse_period = 0;
 
 void setup() {
   // put your setup code here, to run once:
@@ -17,6 +17,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   pulse_signal = analogRead(sensor_pin);
+  //Serial.println(pulse_signal);
   delay(50);
   if (pulse_signal > upper_threshold && any_peak_detected == false) {
     any_peak_detected = true;
@@ -26,7 +27,7 @@ void loop() {
     } else {
       second_pulse_time = millis();
       pulse_period = second_pulse_time - first_pulse_time;
-      pulse_period = pulse_period / 1000;
+      pulse_period = pulse_period / 1000.0;
       BPM = 60.0 / pulse_period;
       Serial.println(BPM);
       first_peak_detected = false;
